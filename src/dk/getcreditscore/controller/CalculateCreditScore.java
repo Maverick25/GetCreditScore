@@ -5,8 +5,13 @@
  */
 package dk.getcreditscore.controller;
 
+import com.google.gson.Gson;
+import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.QueueingConsumer;
+import dk.getcreditscore.dto.LoanRequestDTO;
 import dk.getcreditscore.messaging.Receive;
 import java.io.IOException;
+import java.util.HashMap;
 
 /**
  *
@@ -16,8 +21,24 @@ public class CalculateCreditScore
 {
     public static void receiveMessages() throws IOException,InterruptedException
     {
-        Receive.receiveRequests();
+        HashMap<String,Object> objects = Receive.setUpReceiver();
         
+        QueueingConsumer consumer = (QueueingConsumer) objects.get("consumer");
+        Channel channel = (Channel) objects.get("channel");
+        
+        Gson gson = new Gson();
+        LoanRequestDTO loanRequestDTO;
+        
+        while (true) 
+        {
+          QueueingConsumer.Delivery delivery = consumer.nextDelivery();
+          String message = new String(delivery.getBody());
+          
+          loanRequestDTO = gson.fromJson(message, LoanRequestDTO.class);
+          System.out.println(loanRequestDTO.toString());
+
+          channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
+        }
         
     }
 }
