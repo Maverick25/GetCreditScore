@@ -10,6 +10,7 @@ import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.QueueingConsumer;
+import dk.getcreditscore.controller.CalculateCreditScore;
 /**
  *
  * @author marekrigan
@@ -19,9 +20,9 @@ public class GetCreditScore
 
     
 
-    public static void main(String[] args)
+    public static void main(String[] args) throws IOException, InterruptedException
     {
-        
+        CalculateCreditScore.receiveMessages();
     }
     
 }
