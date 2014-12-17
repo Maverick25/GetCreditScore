@@ -13,6 +13,7 @@ import dk.getcreditscore.client.CreditScoreResponse;
 import dk.getcreditscore.client.CreditScoreService_Service;
 import dk.getcreditscore.dto.LoanRequestDTO;
 import dk.getcreditscore.messaging.Receive;
+import dk.getcreditscore.messaging.Send;
 import java.io.IOException;
 import java.util.HashMap;
 
@@ -22,14 +23,17 @@ import java.util.HashMap;
  */
 public class CalculateCreditScore 
 {
+    private static Gson gson;
+    
     public static void receiveMessages() throws IOException,InterruptedException
     {
+        gson = new Gson();
+        
         HashMap<String,Object> objects = Receive.setUpReceiver();
         
         QueueingConsumer consumer = (QueueingConsumer) objects.get("consumer");
         Channel channel = (Channel) objects.get("channel");
         
-        Gson gson = new Gson();
         LoanRequestDTO loanRequestDTO;
         
         while (true) 
@@ -53,8 +57,10 @@ public class CalculateCreditScore
         
     }
     
-    public static void sendMessage(LoanRequestDTO dto)
+    public static void sendMessage(LoanRequestDTO dto) throws IOException
     {
+        String message = gson.toJson(dto);
         
+        Send.sendMessage(message);
     }
 }
