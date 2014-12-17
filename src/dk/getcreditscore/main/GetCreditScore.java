@@ -6,10 +6,6 @@
 package dk.getcreditscore.main;
 
 import java.io.IOException;
-import com.rabbitmq.client.ConnectionFactory;
-import com.rabbitmq.client.Connection;
-import com.rabbitmq.client.Channel;
-import com.rabbitmq.client.QueueingConsumer;
 import dk.getcreditscore.controller.CalculateCreditScore;
 /**
  *
@@ -18,8 +14,11 @@ import dk.getcreditscore.controller.CalculateCreditScore;
 public class GetCreditScore 
 {
 
-    
-
+    /**
+     * @param args the command line arguments
+     * @throws java.io.IOException
+     * @throws java.lang.InterruptedException
+     */
     public static void main(String[] args) throws IOException, InterruptedException
     {
         CalculateCreditScore.receiveMessages();
