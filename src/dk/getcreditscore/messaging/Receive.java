@@ -19,7 +19,7 @@ import java.util.HashMap;
  */
 public class Receive 
 {
-    private static final String TASK_QUEUE_NAME = "task_queue";
+    private static final String TASK_QUEUE_NAME = "queue_getCreditScore";
     private static Connection connection;
     private static Channel channel;
     

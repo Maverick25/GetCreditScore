@@ -29,12 +29,8 @@ public class CalculateCreditScore
         QueueingConsumer consumer = (QueueingConsumer) objects.get("consumer");
         Channel channel = (Channel) objects.get("channel");
         
-        
-        
         Gson gson = new Gson();
         LoanRequestDTO loanRequestDTO;
-        
-        
         
         while (true) 
         {
@@ -44,13 +40,21 @@ public class CalculateCreditScore
           loanRequestDTO = gson.fromJson(message, LoanRequestDTO.class);
           
           CreditScoreService_Service service = new CreditScoreService_Service();
-            int creditScore = service.getCreditScoreServicePort().creditScore(loanRequestDTO.getSsn());
+          int creditScore = service.getCreditScoreServicePort().creditScore(loanRequestDTO.getSsn());
+          
+          loanRequestDTO.setCreditScore(creditScore);
           
           System.out.println(loanRequestDTO.toString());
-          System.out.println("CreditScore: "+creditScore);
+          
+          sendMessage(loanRequestDTO);
 
           channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
         }
+        
+    }
+    
+    public static void sendMessage(LoanRequestDTO dto)
+    {
         
     }
 }
